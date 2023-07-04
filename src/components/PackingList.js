@@ -1,8 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Item from "./Item";
 function PackingList({ items, onDeleteItem, onPackedItem, onClearList }) {
-  const [sortBy, setSortBy] = useState("input");
+  const initVal = localStorage.getItem("sortBy");
+  const [sortBy, setSortBy] = useState(initVal);
   let sortedItems;
+
+  useEffect(() => {
+    // Update local storage whenever sortBy changes
+    localStorage.setItem("sortBy", sortBy);
+  }, [sortBy]);
+
+  useEffect(() => {
+    // Retrieve sortBy from local storage on component mount
+    const storedSortBy = localStorage.getItem("sortBy");
+    if (storedSortBy) {
+      setSortBy(storedSortBy);
+    }
+  }, []);
 
   if (sortBy === "input") {
     sortedItems = items;
